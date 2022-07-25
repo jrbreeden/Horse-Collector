@@ -1,22 +1,7 @@
 from django.shortcuts import render
+from .models import Horse
 
 # Create your views here.
-
-
-# Add the Horse class & list and view function below the imports
-class Horse:  # Note that parens are optional if not inheriting from another class
-  def __init__(self, name, breed, description, age):
-    self.name = name
-    self.breed = breed
-    self.description = description
-    self.age = age
-
-horses = [
-  Horse('Paint', 'American Paint', 'friendly', 3),
-  Horse('Spot', 'Appaloosa', 'fiery', 0),
-  Horse('Blacky', 'American Quarter', 'runner', 4)
-]
-
 
 
 
@@ -28,5 +13,9 @@ def about(request):
   return render(request, 'about.html')
 
 def horses_index(request):
-   horses = Horse.objects.all()
-   return render(request, 'horses/index.html', { 'horses': horses })
+  horses = Horse.objects.all()
+  return render(request, 'horses/index.html', { 'horses': horses })
+
+def horses_detail(request, horse_id):
+  horse = Horse.objects.get(id=horse_id)
+  return render(request, 'horses/detail.html', { 'horse': horse })

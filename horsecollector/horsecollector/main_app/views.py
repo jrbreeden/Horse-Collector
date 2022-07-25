@@ -28,4 +28,5 @@ def about(request):
   return render(request, 'about.html')
 
 def horses_index(request):
-  return render(request, 'horses/index.html', { 'horses': horses })
+   horses = Horse.objects.all()
+   return render(request, 'horses/index.html', { 'horses': horses })

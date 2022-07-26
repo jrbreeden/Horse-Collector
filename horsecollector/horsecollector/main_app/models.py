@@ -24,14 +24,14 @@ class Horse(models.Model):
       return reverse('detail', kwargs={'horse_id': self.id})
 
 class Feeding(models.Model):
-    date = models.DateField()
+    date = models.DateField('feeding date')
     meal = models.CharField(
         max_length=1,
         choices=MEALS,
-        default=MEALS [0] [0]
+        default=MEALS[0][0]
     )
     horse = models.ForeignKey(Horse, on_delete=models.CASCADE)
-    
+
     def __str__(self):
         return f"{self.get_meal_display()} on {self.date}"
 

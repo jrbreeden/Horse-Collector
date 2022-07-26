@@ -21,6 +21,9 @@ class Horse(models.Model):
     def __str__(self):
       return self.name
 
+    def get_absolute_url(self):
+        return reverse('detail', kwargs={'horse_id': self.id})
+
 
 
 class Feeding(models.Model):

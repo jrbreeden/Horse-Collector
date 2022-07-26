@@ -21,3 +21,4 @@ def horses_detail(request, horse_id):
 class HorseCreate(CreateView):
   model = Horse
   fields = '__all__'
+  

@@ -1,8 +1,10 @@
 from django.shortcuts import render
-from .models import Horse
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 # Create your views here.
+from .models import Horse
+from .forms import FeedingForm
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
 
 def home(request):
   return render(request, 'home.html')
@@ -16,7 +18,8 @@ def horses_index(request):
 
 def horses_detail(request, horse_id):
   horse = Horse.objects.get(id=horse_id)
-  return render(request, 'horses/detail.html', { 'horse': horse })
+  feeding_form = FeedingForm()
+  return render(request, 'horses/detail.html', { 'horse': horse, 'feeding_form': feeding_form })
 
 class HorseCreate(CreateView):
   model = Horse

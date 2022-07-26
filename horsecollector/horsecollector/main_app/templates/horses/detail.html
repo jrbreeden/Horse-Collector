@@ -11,9 +11,9 @@
         <p>Breed: {{ horse.breed }}</p>
         <p>Description: {{ horse.description }}</p>
         {% if horse.age > 0 %}
-          <p>Age: {{ horse.age }}</p>
+        <p>Age: {{ horse.age }}</p>
         {% else %}
-          <p>Age: Foal</p>
+        <p>Age: Foal</p>
         {% endif %}
       </div>
       <div class="card-action">
@@ -23,19 +23,39 @@
     </div>
   </div>
   <div class="col s6">
+    <form action="" method="POST">
+      {% csrf_token %}
+      {{ feeding_form.as_p }}
+      <input type="submit" class="btn" value="Add Feeding">
+    </form>
     <table class="striped">
       <thead>
-        <tr><th>Date</th><th>Meal</th></tr>
+        <tr>
+          <th>Date</th>
+          <th>Meal</th>
+        </tr>
       </thead>
       <tbody>
         {% for feeding in horse.feeding_set.all %}
-          <tr>
-            <td>{{feeding.date}}</td>
-            <td>{{feeding.get_meal_display}}</td>
-          </tr>
+        <tr>
+          <td>{{feeding.date}}</td>
+          <td>{{feeding.get_meal_display}}</td>
+        </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 </div>
+<script>
+  const dateEl = document.getElementById('id_date')
+  M.Datepicker.init(dateEl, {
+    format: 'yyyy-mm-dd',
+    defaultDate: new Date(),
+    setDefaultDate: true,
+    autoClose: true
+  });
+
+  const selectEl = document.getElementById('id_meal')
+  M.FormSelect.init(selectEl);
+</script>
 {% endblock %}

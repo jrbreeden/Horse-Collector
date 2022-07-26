@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from .models import Horse
+from .models import Horse, Toy
 from .forms import FeedingForm
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView
 
 
 def home(request):
@@ -21,22 +22,10 @@ def horses_detail(request, horse_id):
   feeding_form = FeedingForm()
   return render(request, 'horses/detail.html', { 'horse': horse, 'feeding_form': feeding_form })
 
-def add_feeding(request, horse_id):
-  # create a ModelForm instance using the data in request.POST
-  form = FeedingForm(request.POST)
-  # validate the form
-  if form.is_valid():
-    # don't save the form to the db until it
-    # has the horse_id assigned
-    new_feeding = form.save(commit=False)
-    new_feeding.horse_id = horse_id
-    new_feeding.save()
-  return redirect('detail', horse_id=horse_id)
-
 
 class HorseCreate(CreateView):
   model = Horse
-  fields = '__all__'
+  fields = ['name', 'breed', 'description', 'age']
   
 class HorseUpdate(UpdateView):
   model = Horse
@@ -45,3 +34,31 @@ class HorseUpdate(UpdateView):
 class HorseDelete(DeleteView):
   model = Horse
   success_url = '/horses/'
+
+def add_feeding(request, horse_id):
+  # create a ModelForm instance using the data in the posted form
+  form = FeedingForm(request.POST)
+  # validate the data
+  if form.is_valid():
+    new_feeding = form.save(commit=False)
+    new_feeding.horse_id = horse_id
+    new_feeding.save()
+  return redirect('detail', horse_id=horse_id)
+
+class ToyList(ListView):
+  model = Toy
+
+class ToyDetail(DetailView):
+  model = Toy
+
+class ToyCreate(CreateView):
+  model = Toy
+  fields = '__all__'
+
+class ToyUpdate(UpdateView):
+  model = Toy
+  fields = ['name', 'color']
+
+class ToyDelete(DeleteView):
+  model = Toy
+  success_url = '/toys/'

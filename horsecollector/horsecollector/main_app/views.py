@@ -19,8 +19,18 @@ def horses_index(request):
 
 def horses_detail(request, horse_id):
   horse = Horse.objects.get(id=horse_id)
+  # Get the toys the horse doesn't have...
+  # First, create a list of the toy ids that the horse DOES have
+  id_list = horse.toys.all().values_list('id')
+  # Now we can query for toys whose ids are not in the list using exclude
+  toys_horse_doesnt_have = Toy.objects.exclude(id__in=id_list)
+  # instantiate FeedingForm to be rendered in the detail.html template
   feeding_form = FeedingForm()
-  return render(request, 'horses/detail.html', { 'horse': horse, 'feeding_form': feeding_form })
+  return render(request, 'horses/detail.html', { 
+    'horse': horse, 
+    'feeding_form': feeding_form, 
+    'toys': toys_horse_doesnt_have
+    })
 
 
 class HorseCreate(CreateView):
@@ -62,3 +72,7 @@ class ToyUpdate(UpdateView):
 class ToyDelete(DeleteView):
   model = Toy
   success_url = '/toys/'
+
+def assoc_toy(request, horse_id, toy_id):
+  Horse.objects.get(id=horse_id).toys.add(toy_id)
+  return redirect('detail', horse_id=horse_id)

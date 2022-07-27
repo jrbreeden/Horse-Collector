@@ -37,7 +37,15 @@ def horses_detail(request, horse_id):
 class HorseCreate(CreateView):
   model = Horse
   fields = ['name', 'breed', 'description', 'age']
-  
+
+  # This inherited method is called when a
+  # valid cat form is being submitted
+  def form_valid(self, form):
+    # Assign the logged in user (self.request.user)
+    form.instance.user = self.request.user  # form.instance is the horse
+    # Let the CreateView do its job as usual
+    return super().form_valid(form)
+
 class HorseUpdate(UpdateView):
   model = Horse
   fields = ['breed', 'description', 'age']

@@ -56,7 +56,7 @@ class Feeding(models.Model):
 
 class Photo(models.Model):
     url = models.CharField(max_length=200)
-    cat = models.ForeignKey(Horse, on_delete=models.CASCADE)
+    horse = models.ForeignKey(Horse, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Photo for horse_id: {self.horse_id} @{self.url}"

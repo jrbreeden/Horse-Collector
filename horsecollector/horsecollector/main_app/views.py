@@ -8,6 +8,10 @@ import boto3
 import os
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
 # Create your views here.
 
 def home(request):
@@ -16,10 +20,12 @@ def home(request):
 def about(request):
   return render(request, 'about.html')
 
+@login_required
 def horses_index(request):
   horses = Horse.objects.filter(user=request.user)
   return render(request, 'horses/index.html', { 'horses': horses })
 
+@login_required
 def horses_detail(request, horse_id):
   horse = Horse.objects.get(id=horse_id)
   # Get the toys the horse doesn't have...
@@ -36,7 +42,7 @@ def horses_detail(request, horse_id):
     })
 
 
-class HorseCreate(CreateView):
+class HorseCreate(LoginRequiredMixin, CreateView):
   model = Horse
   fields = ['name', 'breed', 'description', 'age']
 
@@ -48,14 +54,15 @@ class HorseCreate(CreateView):
     # Let the CreateView do its job as usual
     return super().form_valid(form)
 
-class HorseUpdate(UpdateView):
+class HorseUpdate(LoginRequiredMixin, UpdateView):
   model = Horse
   fields = ['breed', 'description', 'age']
 
-class HorseDelete(DeleteView):
+class HorseDelete(LoginRequiredMixin, DeleteView):
   model = Horse
   success_url = '/horses/'
 
+@login_required
 def add_feeding(request, horse_id):
   # create a ModelForm instance using the data in the posted form
   form = FeedingForm(request.POST)
@@ -66,28 +73,30 @@ def add_feeding(request, horse_id):
     new_feeding.save()
   return redirect('detail', horse_id=horse_id)
 
-class ToyList(ListView):
+class ToyList(LoginRequiredMixin, ListView):
   model = Toy
 
-class ToyDetail(DetailView):
+class ToyDetail(LoginRequiredMixin, DetailView):
   model = Toy
 
-class ToyCreate(CreateView):
+class ToyCreate(LoginRequiredMixin, CreateView):
   model = Toy
   fields = '__all__'
 
-class ToyUpdate(UpdateView):
+class ToyUpdate(LoginRequiredMixin, UpdateView):
   model = Toy
   fields = ['name', 'color']
 
-class ToyDelete(DeleteView):
+class ToyDelete(LoginRequiredMixin, DeleteView):
   model = Toy
   success_url = '/toys/'
 
+@login_required
 def assoc_toy(request, horse_id, toy_id):
   Horse.objects.get(id=horse_id).toys.add(toy_id)
   return redirect('detail', horse_id=horse_id)
 
+@login_required
 def add_photo(request, horse_id):
   # photo-file will be the "name" attribute on the <input type="file">
   photo_file = request.FILES.get('photo-file', None)

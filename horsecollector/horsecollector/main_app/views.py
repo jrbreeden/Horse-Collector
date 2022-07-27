@@ -17,7 +17,7 @@ def about(request):
   return render(request, 'about.html')
 
 def horses_index(request):
-  horses = Horse.objects.all()
+  horses = Horse.objects.filter(user=request.user)
   return render(request, 'horses/index.html', { 'horses': horses })
 
 def horses_detail(request, horse_id):

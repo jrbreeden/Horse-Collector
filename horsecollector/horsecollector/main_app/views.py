@@ -10,9 +10,26 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from . serializer import *
 
 # Create your views here.
+class ReactView(APIView):
+    
+    serializer_class = ReactSerializer
+  
+    def get(self, request):
+        detail = [ {"name": detail.name,"detail": detail.detail} 
+        for detail in React.objects.all()]
+        return Response(detail)
+  
+    def post(self, request):
+  
+        serializer = ReactSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return  Response(serializer.data)
 
 def home(request):
   return render(request, 'home.html')

@@ -10,9 +10,20 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.http import JsonResponse
+from main_app.serializer import MyTokenObtainPairSerializer, RegisterSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework import generics
+from django.contrib.auth.models import User
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.views import APIView
+from . models import *
 from . serializer import *
+
+
+
 
 # Create your views here.
 class ReactView(APIView):
@@ -30,6 +41,28 @@ class ReactView(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return  Response(serializer.data)
+
+
+
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = RegisterSerializer
+
+
+@api_view(['GET'])
+def getRoutes(request):
+    routes = [
+        '/api/token/',
+        '/api/register/',
+        '/api/token/refresh/'
+    ]
+    return Response(routes)
 
 def home(request):
   return render(request, 'home.html')
@@ -135,15 +168,16 @@ def add_photo(request, horse_id):
   return redirect('detail', horse_id=horse_id)
 
 def signup(request):
-  error_message = ''
-  if request.method == 'POST':
-    form = UserCreationForm(request.POST)
-    if form.is_valid():
-      user = form.save()
-      login(request, user)
-      return redirect('index')
-    else:
-      error_message = 'Invalid sign up - try again'
-  form = UserCreationForm()
-  context = {'form': form, 'error_message': error_message}
-  return render(request, 'registration/signup.html', context)
+  print('An error occurred')
+  # error_message = ''
+  # if request.method == 'POST':
+  #   form = UserCreationForm(request.POST)
+  #   if form.is_valid():
+  #     user = form.save()
+  #     login(request, user)
+  #     return redirect('index')
+  #   else:
+  #     error_message = 'Invalid sign up - try again'
+  # form = UserCreationForm()
+  # context = {'form': form, 'error_message': error_message}
+  # return render(request, 'registration/signup.html', context)

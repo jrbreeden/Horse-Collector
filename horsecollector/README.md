@@ -1,7 +1,8 @@
 # Horse Collector
-The app, Horse Collector is an app that lets the user collect horses while also being able to feed them and give them toys.
+The app, Horse Collector, is an app that lets the user collect horses while also being able to feed them and give them toys. I enjoyed going to horse shows when I was a child and I wanted to incoporate my passion for horses into my project.
 
 # User Story
+* As a user, I want to be able to add horses to my collection.
 
 * As a user, I want to be able to view some details about horses.
 

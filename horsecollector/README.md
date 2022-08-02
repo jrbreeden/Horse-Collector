@@ -9,6 +9,8 @@ The app, Horse Collector is an app that lets the user collect horses while also 
 
 * As a user, I want to be able to give toys to the horses.
 
+* As a user, I want to be able to upload photos of the horses.
+
 # Screenshots
 ![Screen Shot](./horsecollector/main_app/images/Home.png)
 ![Screen Shot](./horsecollector/main_app/images/HorseDetails.png)

@@ -23,3 +23,8 @@ The app, Horse Collector is an app that lets the user collect horses while also 
 
 # ERD
 ![Screen Shot](./horsecollector/main_app/images/ERD.png)
+
+
+# Ice Box
+* Get The frontend and the backend to connect
+* Be able to leave comments
